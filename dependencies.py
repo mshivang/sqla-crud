@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
-from database import session
+from database import get_session
 
 def get_db() -> Session:
+    db = get_session()
     try:
-        yield session
+        yield db
     finally:
-        session.close()
+        db.close()

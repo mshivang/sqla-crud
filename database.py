@@ -13,39 +13,40 @@ else:
 
 load_dotenv(env_file)
 
-url = URL.create(
-    drivername = os.environ.get('DB_DRIVER_NAME'),
-    username = os.environ.get('DB_USERNAME'),
-    password = os.environ.get('DB_PASSWORD'),
-    host = os.environ.get('DB_HOST'),
-    database = os.environ.get('DB_DATABASE'),
-    port = os.environ.get('DB_PORT')
-)
-
-engine = create_engine(url)
-
-session = scoped_session(
-    sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=engine
+def get_session():
+    url = URL.create(
+        drivername=os.environ.get('DB_DRIVER_NAME'),
+        username=os.environ.get('DB_USERNAME'),
+        password=os.environ.get('DB_PASSWORD'),
+        host=os.environ.get('DB_HOST'),
+        database=os.environ.get('DB_DATABASE'),
+        port=os.environ.get('DB_PORT')
     )
-)
+
+    engine = create_engine(url)
+    session = scoped_session(
+        sessionmaker(
+            autocommit=False,
+            autoflush=False,
+            bind=engine
+        )
+    )
+    return session
 
 Base = declarative_base()
 # Base.query = session.query_property()
 
-def init_db():
-    print("Init Ran")
-    # Creating tables.
-    from models.user import User
-    from models.message import Message
-    from models.room import Room
-    Base.metadata.create_all(bind=engine)
+# def init_db():
+#     print("Init Ran")
+#     # Creating tables.
+#     from models.user import User
+#     from models.message import Message
+#     from models.room import Room
+#     Base.metadata.create_all(bind=engine)
 
-     # Run Alembic migrations
-    from alembic.config import Config
-    from alembic import command
+#      # Run Alembic migrations
+#     from alembic.config import Config
+#     from alembic import command
 
-    alembic_cfg = Config("alembic.ini")
-    command.upgrade(alembic_cfg, "head", sql=False, tag=None)
+#     alembic_cfg = Config("alembic.ini")
+#     command.upgrade(alembic_cfg, "head", sql=False, tag=None)

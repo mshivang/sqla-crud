@@ -1,82 +1,84 @@
 from models.room import Room
-from database import session
+from sqlalchemy.orm import Session
+from database import get_session
+from fastapi import Depends
 
 # Create a room in database.
-def create_room(**room_data):
+def create_room(db: Session = Depends(get_session), **room_data):
     try:
         new_room = Room(**room_data)
-        session.add(new_room)
-        session.commit()
-        session.refresh(new_room)
+        db.add(new_room)
+        db.commit()
+        db.refresh(new_room)
         return new_room
     
-    # Rollback the session in case of an error
+    # Rollback the db in case of an error
     except Exception as e:
-        session.rollback()  
+        db.rollback()  
         raise e
     
-    # Close the session to release resources
+    # Close the db to release resources
     finally:
-        session.close()
+        db.close()
 
 # Get all rooms from database.
-def get_all_rooms():
+def get_all_rooms(db: Session = Depends(get_session)):
     try:
-        rooms = session.query(Room).all()
+        rooms = db.query(Room).all()
         return rooms
     
     except Exception as e:
         raise e
     
     finally:
-        session.close()
+        db.close()
 
 # Get a particular room by id.
-def get_room_by_id(room_id):
+def get_room_by_id(room_id, db: Session = Depends(get_session)):
     try:
-        room = session.query(Room).filter(Room.id == room_id).first()
+        room = db.query(Room).filter(Room.id == room_id).first()
         return room
     
     except Exception as e:
         raise e
     
     finally:
-        session.close()
+        db.close()
 
 # Updates a particular room by id.
-def update_room(room_id, **update_data):
+def update_room(room_id, db: Session = Depends(get_session), **update_data):
     try:
-        room = session.query(Room).filter(Room.id == room_id).first()
+        room = db.query(Room).filter(Room.id == room_id).first()
         if room:
             for key, value in update_data.items():
                 setattr(room, key, value)
-            session.commit()
-            session.refresh(room)
+            db.commit()
+            db.refresh(room)
             return room
         else:
             return None
     
     except Exception as e:
-        session.rollback()
+        db.rollback()
         raise e
     
     finally:
-        session.close()
+        db.close()
 
 # Deletes a particular room by id.
-def delete_room(room_id):
+def delete_room(room_id, db: Session = Depends(get_session)):
     try:
-        room = session.query(Room).filter(Room.id == room_id).first()
+        room = db.query(Room).filter(Room.id == room_id).first()
         if room:
-            session.delete(room)
-            session.commit()
+            db.delete(room)
+            db.commit()
             return room
         else:
             return None
     
     except Exception as e:
-        session.rollback()
+        db.rollback()
         raise e
     
     finally:
-        session.close()
+        db.close()

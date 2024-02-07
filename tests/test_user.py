@@ -13,11 +13,11 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
     poolclass=StaticPool,
 )
+
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 Base.metadata.create_all(bind=engine)
-
 
 def override_get_db():
     try:
@@ -25,7 +25,6 @@ def override_get_db():
         yield db
     finally:
         db.close()
-
 
 app.dependency_overrides[get_db] = override_get_db
 
@@ -40,28 +39,28 @@ def test_create_user():
     }
     response = client.post("/users/", json=data, headers={"X-Token": "coneofsilence"})
     assert response.status_code == 201
-    assert response.json()["email"] == "john.doe@example.com"
+    assert response.json()["user"]["email"] == "john.doe@example.com"
 
 def test_get_all_users():
     response = client.get("/users/", headers={"X-Token": "coneofsilence"})
     assert response.status_code == 200
-    assert len(response.json()) > 0
+    assert len(response.json()["users"]) > 0
 
 def test_get_user_by_id():
     user_id = 1
     response = client.get(f"/users/{user_id}/", headers={"X-Token": "coneofsilence"})
     assert response.status_code == 200
-    assert response.json()["id"] == user_id
+    assert response.json()["user"]["id"] == user_id
 
 def test_update_user():
     user_id = 1
     update_data = {"fname": "UpdatedName"}
     response = client.patch(f"/users/{user_id}/", json=update_data, headers={"X-Token": "coneofsilence"})
     assert response.status_code == 200
-    assert response.json()["fname"] == "UpdatedName"
+    assert response.json()["user"]["fname"] == "UpdatedName"
 
 def test_delete_user():
     user_id = 1
     response = client.delete(f"/users/{user_id}/", headers={"X-Token": "coneofsilence"})
     assert response.status_code == 200
-    assert response.json()["id"] == user_id
+    assert response.json()["user"]["id"] == user_id
