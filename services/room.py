@@ -1,10 +1,10 @@
 from models.room import Room
 from sqlalchemy.orm import Session
-from database import get_session
+from dependencies import get_db
 from fastapi import Depends
 
 # Create a room in database.
-def create_room(db: Session = Depends(get_session), **room_data):
+def create_room(room_data, db: Session = Depends(get_db)):
     try:
         new_room = Room(**room_data)
         db.add(new_room)
@@ -22,7 +22,7 @@ def create_room(db: Session = Depends(get_session), **room_data):
         db.close()
 
 # Get all rooms from database.
-def get_all_rooms(db: Session = Depends(get_session)):
+def get_all_rooms(db: Session = Depends(get_db)):
     try:
         rooms = db.query(Room).all()
         return rooms
@@ -34,7 +34,7 @@ def get_all_rooms(db: Session = Depends(get_session)):
         db.close()
 
 # Get a particular room by id.
-def get_room_by_id(room_id, db: Session = Depends(get_session)):
+def get_room_by_id(room_id, db: Session = Depends(get_db)):
     try:
         room = db.query(Room).filter(Room.id == room_id).first()
         return room
@@ -46,7 +46,7 @@ def get_room_by_id(room_id, db: Session = Depends(get_session)):
         db.close()
 
 # Updates a particular room by id.
-def update_room(room_id, db: Session = Depends(get_session), **update_data):
+def update_room(room_id, update_data, db: Session = Depends(get_db)):
     try:
         room = db.query(Room).filter(Room.id == room_id).first()
         if room:
@@ -66,7 +66,7 @@ def update_room(room_id, db: Session = Depends(get_session), **update_data):
         db.close()
 
 # Deletes a particular room by id.
-def delete_room(room_id, db: Session = Depends(get_session)):
+def delete_room(room_id, db: Session = Depends(get_db)):
     try:
         room = db.query(Room).filter(Room.id == room_id).first()
         if room:

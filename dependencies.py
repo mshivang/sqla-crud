@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from database import get_session
 
-def get_db() -> Session:
+async def get_db() -> Session:
     db = get_session()
     try:
         yield db

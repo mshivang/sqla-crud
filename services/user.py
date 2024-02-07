@@ -1,10 +1,10 @@
 from models.user import User
 from sqlalchemy.orm import Session
-from database import get_session
+from dependencies import get_db
 from fastapi import Depends
 
 # Create a user in database.
-def create_user(db: Session = Depends(get_session), **user_data):
+def create_user(user_data, db: Session = Depends(get_db)):
     try:
         new_user = User(**user_data)
         db.add(new_user)
@@ -22,7 +22,7 @@ def create_user(db: Session = Depends(get_session), **user_data):
         db.close()
 
 # Get all users from database.
-def get_all_users(db: Session = Depends(get_session)):
+def get_all_users(db: Session = Depends(get_db)):
     try:
         users = db.query(User).all()
         return users
@@ -34,7 +34,7 @@ def get_all_users(db: Session = Depends(get_session)):
         db.close()
 
 # Get a particular user by id.
-def get_user_by_id(user_id, db: Session = Depends(get_session)):
+def get_user_by_id(user_id, db: Session = Depends(get_db)):
     try:
         user = db.query(User).filter(User.id == user_id).first()
         return user
@@ -46,7 +46,7 @@ def get_user_by_id(user_id, db: Session = Depends(get_session)):
         db.close()
 
 # Updates a particular user by id.
-def update_user(user_id, db: Session = Depends(get_session), **update_data):
+def update_user(user_id, update_data, db: Session = Depends(get_db)):
     try:
         user = db.query(User).filter(User.id == user_id).first()
         if user:
@@ -66,7 +66,7 @@ def update_user(user_id, db: Session = Depends(get_session), **update_data):
         db.close()
 
 # Deletes a particular user by id.
-def delete_user(user_id, db: Session = Depends(get_session)):
+def delete_user(user_id, db: Session = Depends(get_db)):
     try:
         user = db.query(User).filter(User.id == user_id).first()
         if user:

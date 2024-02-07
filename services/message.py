@@ -1,10 +1,10 @@
 from models.message import Message
 from sqlalchemy.orm import Session
-from database import get_session
+from dependencies import get_db
 from fastapi import Depends
 
 # Create a message in database.
-def create_message(db: Session = Depends(get_session), **message_data):
+def create_message(message_data, db: Session = Depends(get_db)):
     try:
         new_message = Message(**message_data)
         db.add(new_message)
@@ -22,7 +22,7 @@ def create_message(db: Session = Depends(get_session), **message_data):
         db.close()
 
 # Get all messages from database.
-def get_all_messages(db: Session = Depends(get_session)):
+def get_all_messages(db: Session = Depends(get_db)):
     try:
         messages = db.query(Message).all()
         return messages
@@ -34,7 +34,7 @@ def get_all_messages(db: Session = Depends(get_session)):
         db.close()
 
 # Get a particular message by id.
-def get_message_by_id(message_id, db: Session = Depends(get_session)):
+def get_message_by_id(message_id, db: Session = Depends(get_db)):
     try:
         message = db.query(Message).filter(Message.id == message_id).first()
         return message
@@ -46,7 +46,7 @@ def get_message_by_id(message_id, db: Session = Depends(get_session)):
         db.close()
 
 # Updates a particular message by id.
-def update_message(message_id, db: Session = Depends(get_session), **update_data):
+def update_message(message_id, update_data, db: Session = Depends(get_db)):
     try:
         message = db.query(Message).filter(Message.id == message_id).first()
         if message:
@@ -66,7 +66,7 @@ def update_message(message_id, db: Session = Depends(get_session), **update_data
         db.close()
 
 # Deletes a particular message by id.
-def delete_message(message_id, db: Session = Depends(get_session)):
+def delete_message(message_id, db: Session = Depends(get_db)):
     try:
         message = db.query(Message).filter(Message.id == message_id).first()
         if message:

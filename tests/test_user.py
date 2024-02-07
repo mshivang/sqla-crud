@@ -19,7 +19,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 Base.metadata.create_all(bind=engine)
 
-def override_get_db():
+async def override_get_db():
     try:
         db = TestingSessionLocal()
         yield db
@@ -37,7 +37,8 @@ def test_create_user():
         "email": "john.doe@example.com",
         "password": "securepassword"
     }
-    response = client.post("/users/", json=data, headers={"X-Token": "coneofsilence"})
+    response = client.post("/users/", json=data, headers={"Content-Type": "application/json"})
+    print(response.json())
     assert response.status_code == 201
     assert response.json()["user"]["email"] == "john.doe@example.com"
 
