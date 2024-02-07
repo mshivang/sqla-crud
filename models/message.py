@@ -4,20 +4,21 @@ from database import Base
 from models.user import User
 from models.room import Room
 
-class Chat(Base):
-    __tablename__ = 'chats'
+class Message(Base):
+    __tablename__ = 'messages'
     id = Column(Integer, primary_key=True)
     text = Column(String(500), unique=False)
     room_id = Column(Integer, ForeignKey(Room.id)) 
     created_by = Column(Integer, ForeignKey(User.id)) 
 
     # relationships
-    sent_by = relationship('User', backref='chats')
-    room = relationship('Room', backref='chats')
+    sent_by = relationship('User', backref='messages')
+    room = relationship('Room', backref='messages')
 
-    def __init__(self, name=None, created_by=None):
-        self.name = name
+    def __init__(self, text=None, room_id=None, created_by=None):
+        self.text = text
         self.created_by = created_by  
-
+        self.room_id = room_id
+        
     def __repr__(self):
-        return f'<Room {self.name!r}>'
+        return f'<Room {self.text!r}>'

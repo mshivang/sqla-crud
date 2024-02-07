@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from controllers.user import fetch_users, fetch_user, register_user, update_profile, delete_user
+from fastapi.responses import JSONResponse
+from controllers.user import fetch_users, fetch_user, register_user, _update_user, _delete_user
 
 router = APIRouter()
 
@@ -8,7 +9,7 @@ router = APIRouter()
 async def read_users():
     try:
         users = fetch_users()
-        return {"users": users, "status": "success"}
+        return JSONResponse(content={"users": users, "status": "success"}, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
@@ -17,7 +18,7 @@ async def read_users():
 async def add_user(data: dict):
     try:
         registered_user = register_user(data)
-        return {"user": registered_user, "status": "success"}
+        return JSONResponse(content={"user": registered_user, "status": "success"}, status_code=201)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
@@ -27,7 +28,7 @@ async def read_user(id: int):
     try:
         user = fetch_user(id)
         if user:
-            return {"user": user, "status": "success"}
+            return JSONResponse(content={"user": user, "status": "success"}, status_code=200)
         else:
             raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:
@@ -37,9 +38,9 @@ async def read_user(id: int):
 @router.patch("/users/{id}", tags=["users"])
 async def update_user_endpoint(id: int, data: dict):
     try:
-        updated_user = update_profile(id, data)
+        updated_user = _update_user(id, data)
         if updated_user:
-            return {"user": updated_user, "status": "success"}
+            return JSONResponse(content={"user": updated_user, "status": "success"}, status_code=200)
         else:
             raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:
@@ -49,9 +50,9 @@ async def update_user_endpoint(id: int, data: dict):
 @router.delete("/users/{id}", tags=["users"])
 async def delete_user_endpoint(id: int):
     try:
-        deleted_user = delete_user(id)
+        deleted_user = _delete_user(id)
         if deleted_user:
-            return {"user": deleted_user, "status": "success"}
+            return JSONResponse(content={"user": deleted_user, "status": "success"}, status_code=200)
         else:
             raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:

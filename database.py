@@ -14,7 +14,7 @@ else:
 load_dotenv(env_file)
 
 url = URL.create(
-    drivername = os.environ.get('DB_DIRVER_NAME'),
+    drivername = os.environ.get('DB_DRIVER_NAME'),
     username = os.environ.get('DB_USERNAME'),
     password = os.environ.get('DB_PASSWORD'),
     host = os.environ.get('DB_HOST'),
@@ -33,11 +33,14 @@ session = scoped_session(
 )
 
 Base = declarative_base()
-Base.query = session.query_property()
+# Base.query = session.query_property()
 
 def init_db():
+    print("Init Ran")
     # Creating tables.
-    import models
+    from models.user import User
+    from models.message import Message
+    from models.room import Room
     Base.metadata.create_all(bind=engine)
 
      # Run Alembic migrations

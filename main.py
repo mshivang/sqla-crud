@@ -1,19 +1,15 @@
-from database import session, init_db
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-from routes import users
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Initialize database
-    init_db()
-    yield
-    # Clean up database session
-    session.remove()
+from fastapi import FastAPI, Depends
+from routes import users, message, rooms
+from dependencies import get_db
+from database import init_db
 
 # Initializing fast api app.
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 #Routers
-app.include_router(users.router)
+app.include_router(users.router, dependencies=[Depends(get_db)])
+app.include_router(message.router, dependencies=[Depends(get_db)])
+app.include_router(rooms.router, dependencies=[Depends(get_db)])
     
+# Initialize database
+init_db()

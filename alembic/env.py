@@ -26,7 +26,7 @@ config.set_section_option(section, "DB_USERNAME", os.environ.get("DB_USERNAME"))
 config.set_section_option(section, "DB_PASSWORD", os.environ.get("DB_PASSWORD"))
 config.set_section_option(section, "DB_PORT", os.environ.get("DB_PORT"))
 config.set_section_option(section, "DB_DATABASE", os.environ.get("DB_DATABASE"))
-config.set_section_option(section, "DB_DIRVER_NAME", os.environ.get("DB_DIRVER_NAME"))
+config.set_section_option(section, "DB_DRIVER_NAME", os.environ.get("DB_DRIVER_NAME"))
 config.set_section_option(section, "DB_HOST", os.environ.get("DB_HOST"))
 
 # Interpret the config file for Python logging.
