@@ -13,8 +13,8 @@ else:
 
 load_dotenv(env_file)
 
-def get_session():
-    url = URL.create(
+# URL to connect to postgres 
+url = URL.create(
         drivername=os.environ.get('DB_DRIVER_NAME'),
         username=os.environ.get('DB_USERNAME'),
         password=os.environ.get('DB_PASSWORD'),
@@ -23,7 +23,11 @@ def get_session():
         port=os.environ.get('DB_PORT')
     )
 
-    engine = create_engine(url)
+# Creating engine
+engine = create_engine(url)
+
+# Returns database session
+def get_session():
     session = scoped_session(
         sessionmaker(
             autocommit=False,
@@ -31,22 +35,23 @@ def get_session():
             bind=engine
         )
     )
+
     return session
 
 Base = declarative_base()
-# Base.query = session.query_property()
 
-# def init_db():
-#     print("Init Ran")
-#     # Creating tables.
-#     from models.user import User
-#     from models.message import Message
-#     from models.room import Room
-#     Base.metadata.create_all(bind=engine)
+# Initializing Databse and Tables.
+def init_db():
+    # Creating tables.
+    from models.user import User
+    from models.message import Message
+    from models.room import Room
 
-#      # Run Alembic migrations
-#     from alembic.config import Config
-#     from alembic import command
+    Base.metadata.create_all(bind=engine)
 
-#     alembic_cfg = Config("alembic.ini")
-#     command.upgrade(alembic_cfg, "head", sql=False, tag=None)
+     # Run Alembic migrations
+    from alembic.config import Config
+    from alembic import command
+
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head", sql=False, tag=None)
