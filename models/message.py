@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
-from models.user import User
 from models.room import Room
 
 class Message(Base):
@@ -9,10 +8,9 @@ class Message(Base):
     id = Column(Integer, primary_key=True)
     text = Column(String(500), unique=False)
     room_id = Column(Integer, ForeignKey(Room.id)) 
-    created_by = Column(Integer, ForeignKey(User.id)) 
+    created_by = Column(Integer, unique=False) 
 
     # relationships
-    sent_by = relationship('User', backref='messages')
     room = relationship('Room', backref='messages')
 
     def __init__(self, text=None, room_id=None, created_by=None):

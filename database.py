@@ -43,7 +43,6 @@ Base = declarative_base()
 # Initializing Databse and Tables.
 def init_db():
     # Creating tables.
-    from models.user import User
     from models.message import Message
     from models.room import Room
 

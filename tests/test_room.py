@@ -33,7 +33,7 @@ client = TestClient(app)
 def test_create_room():
     data = {
         "name": "Room 1",
-        "created_by": 1,
+        "created_by": "57f7a615-74a3-4a8f-bd9d-2ed044d2e6c1",
     }
     response = client.post("/rooms/", json=data, headers={"Content-Type": "application/json"})
     print(response.json())

@@ -1,0 +1,27 @@
+<div class="space-y-4 bg-gray-100 p-4">
+  <h4 class="font-bold">Create Room</h4>
+  <form class="w-full space-y-2">
+    <mat-form-field class="w-full">
+      <mat-label>Room Name</mat-label>
+      <input
+        type="text"
+        matInput
+        [formControl]="roomNameFormControl"
+        placeholder="Ex. Jhon's Room"
+      />
+      @if (roomNameFormControl.hasError('required')) {
+      <mat-error>Room name is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+
+    <button
+      type="button"
+      (click)="createRoom()"
+      mat-raised-button
+      class="w-full"
+      color="primary"
+    >
+      Create Room
+    </button>
+  </form>
+</div>

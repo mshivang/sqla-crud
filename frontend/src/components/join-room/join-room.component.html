@@ -1,0 +1,30 @@
+<div class="space-y-4 bg-gray-100 p-4">
+  <h4 class="font-bold">Join Room</h4>
+  <form class="w-full space-y-2">
+    <mat-form-field class="w-full">
+      <mat-label>Room Id</mat-label>
+      <input
+        type="text"
+        matInput
+        [formControl]="roomIdFormControl"
+        placeholder="Ex. pat@example.com"
+      />
+      @if (roomIdFormControl.hasError('email') &&
+      !roomIdFormControl.hasError('required')) {
+      <mat-error>Please enter a valid room id</mat-error>
+      } @if (roomIdFormControl.hasError('required')) {
+      <mat-error>Room id is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+
+    <button
+      type="button"
+      (click)="joinRoom()"
+      mat-raised-button
+      class="w-full"
+      color="primary"
+    >
+      Join Room
+    </button>
+  </form>
+</div>

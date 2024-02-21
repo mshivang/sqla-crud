@@ -1,0 +1,111 @@
+<section>
+  <div class="container mx-auto h-full px-6 py-24">
+    <div
+      class="g-6 flex h-full flex-wrap items-center justify-center lg:justify-between"
+    >
+      <!-- Left column container with background-->
+      <div class="mb-12 md:mb-0 md:w-8/12 lg:w-6/12">
+        <img
+          src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+          class="w-full"
+          alt="Phone image"
+        />
+      </div>
+
+      <!-- Right column container with form -->
+      <div class="md:w-8/12 lg:ml-6 lg:w-5/12">
+        <form (submit)="onSubmit()" class="space-y-4">
+          <h3 class="text-xl font-bold">Login To ChatPlus</h3>
+          <div class="">
+            <!-- Username input -->
+            <mat-form-field class="w-full">
+              <mat-label>Username</mat-label>
+              <input
+                type="text"
+                matInput
+                maxlength="40"
+                placeholder="Username"
+                [formControl]="userNameControl"
+                class="w-full"
+              />
+
+              @if (userNameControl.hasError('min') &&
+              !userNameControl.hasError('required')) {
+              <mat-error>Username must have minimum 2 characters</mat-error>
+              } @if (userNameControl.hasError('required')) {
+              <mat-error>Username is <strong>required</strong></mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Password input -->
+            <mat-form-field class="w-full">
+              <mat-label>Password</mat-label>
+              <input
+                type="password"
+                matInput
+                maxlength="20"
+                placeholder="Password"
+                [formControl]="passwordControl"
+                class="w-full"
+              />
+
+              @if (passwordControl.hasError('pattern') &&
+              !passwordControl.hasError('required')) {
+              <mat-error>Password must have minimum 8 characters</mat-error>
+              } @if (passwordControl.hasError('required')) {
+              <mat-error>Password is <strong>required</strong></mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Remember me checkbox -->
+            <div class="flex items-center justify-between">
+              <mat-checkbox color="primary" class="example-margin"
+                >Remember Me</mat-checkbox
+              >
+
+              <!-- Forgot password link -->
+              <a
+                routerLink="/forgot-password"
+                routerLinkActive="router-link-active"
+                class="text-indigo-500 transition duration-150 ease-in-out hover:text-indigo-600 focus:text-indigo-500-600 active:text-indigo-500-700 dark:text-indigo-500-400 dark:hover:text-indigo-500-500 dark:focus:text-indigo-500-500 dark:active:text-indigo-500-600"
+                >Forgot password?</a
+              >
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <button
+            [disabled]="passwordControl.invalid || userNameControl.invalid"
+            class="w-full"
+            mat-raised-button
+            color="primary"
+          >
+            Sign in
+          </button>
+
+          <!-- Divider -->
+          <mat-divider title="OR"></mat-divider>
+
+          <!-- Social login buttons -->
+          <button
+            class="w-full"
+            mat-raised-button
+            style="background-color: #3b5998"
+          >
+            <mat-icon class="text-white">facebook</mat-icon>
+            <span class="text-white">Continue with Facebook</span>
+          </button>
+
+          <button
+            class="w-full"
+            mat-raised-button
+            style="background-color: #55acee"
+          >
+            <mat-icon class="text-white">home</mat-icon>
+            <span class="text-white">Continue with Twitter</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
