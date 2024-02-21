@@ -1,0 +1,10 @@
+<div
+  [ngClass]="{
+    'bg-blue-700': isOwn,
+    'bg-gray-600': !isOwn
+  }"
+  class="text-white p-3 rounded-lg w-full mb-2"
+>
+  <p class="text-xs">User #{{ message.created_by }}</p>
+  <p>{{ message.text }}</p>
+</div>

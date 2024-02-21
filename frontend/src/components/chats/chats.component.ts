@@ -9,10 +9,12 @@ import {
 } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
 import { Message, MessageBase } from '../../domain/entity/Message';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { RoomService } from '../../services/room.service';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { MessageComponent } from '../message/message.component';
 
 @Component({
   selector: 'app-chats',
@@ -23,6 +25,8 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     ReactiveFormsModule,
     CommonModule,
+    RouterModule,
+    MessageComponent
   ],
   templateUrl: './chats.component.html',
   styleUrl: './chats.component.css',
@@ -35,7 +39,8 @@ export class ChatsComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private roomService: RoomService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   messageControl = new FormControl('', [
@@ -53,6 +58,8 @@ export class ChatsComponent implements OnInit, OnDestroy {
           this.userId = user.pk;
           console.log('User:', user);
           this.tryConnect();
+        } else {
+          this.router.navigate(['login']);
         }
       },
       (error) => {
@@ -71,7 +78,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error('Error getting room:', error);
-        // Handle error if needed
+        this.router.navigate(['']);
       }
     );
   }

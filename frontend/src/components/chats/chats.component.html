@@ -1,16 +1,8 @@
 <h3 class="text-xl font-bold">Meeting Chats</h3>
 
-<div class="chat-container bg-white flex-1 overflow-y-scroll p-4">
+<div class="bg-white flex-1 overflow-y-scroll p-4 flex flex-col">
   <div *ngFor="let message of messages" class="flex w-full">
-    <div
-      [ngClass]="{
-        'ml-auto bg-blue-500': message.created_by === userId,
-        'mr-auto bg-green-500': message.created_by !== userId
-      }"
-      class="message text-white p-3 rounded-lg mb-2"
-    >
-      {{ message.text }}
-    </div>
+    <app-message [message]="message" [isOwn]="message.created_by === userId" />
   </div>
 </div>
 
